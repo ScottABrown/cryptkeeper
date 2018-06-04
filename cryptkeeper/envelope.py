@@ -1,4 +1,4 @@
-"""kms_agent.py
+"""envelope.py
 
 Tools for working with Amazon KMS.
 """

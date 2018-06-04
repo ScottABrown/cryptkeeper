@@ -1,4 +1,4 @@
-"""Test cases for the kms_agent.py module."""
+"""Test cases for the envelope.py module."""
 
 import filecmp
 import logging
@@ -11,7 +11,7 @@ import unittest
 
 # from cryptkeeper import _engine
 from cryptkeeper import errors
-from cryptkeeper import kms_agent
+from cryptkeeper import envelope
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Uncomment to show lower level logging statements.
@@ -115,25 +115,25 @@ class TestKmsAgentModule(EnvelopesTestBaseClass):
         envelope_name = '.'.join([plain_name, 'kms-envelope'])
         envelope_archive_name = '.'.join([envelope_name, 'kms-tgz'])
 
-        self.assertEqual(kms_agent.plain_name(plain_name), plain_name)
-        self.assertEqual(kms_agent.archive_name(plain_name), archive_name)
-        self.assertEqual(kms_agent.envelope_name(plain_name), envelope_name)
-        self.assertEqual(kms_agent.envelope_archive_name(plain_name), envelope_archive_name)
+        self.assertEqual(envelope.plain_name(plain_name), plain_name)
+        self.assertEqual(envelope.archive_name(plain_name), archive_name)
+        self.assertEqual(envelope.envelope_name(plain_name), envelope_name)
+        self.assertEqual(envelope.envelope_archive_name(plain_name), envelope_archive_name)
 
-        self.assertEqual(kms_agent.plain_name(archive_name), plain_name)
-        self.assertEqual(kms_agent.archive_name(archive_name), archive_name)
-        self.assertEqual(kms_agent.envelope_name(archive_name), envelope_name)
-        self.assertEqual(kms_agent.envelope_archive_name(archive_name), envelope_archive_name)
+        self.assertEqual(envelope.plain_name(archive_name), plain_name)
+        self.assertEqual(envelope.archive_name(archive_name), archive_name)
+        self.assertEqual(envelope.envelope_name(archive_name), envelope_name)
+        self.assertEqual(envelope.envelope_archive_name(archive_name), envelope_archive_name)
 
-        self.assertEqual(kms_agent.plain_name(envelope_name), plain_name)
-        self.assertEqual(kms_agent.archive_name(envelope_name), archive_name)
-        self.assertEqual(kms_agent.envelope_name(envelope_name), envelope_name)
-        self.assertEqual(kms_agent.envelope_archive_name(envelope_name), envelope_archive_name)
+        self.assertEqual(envelope.plain_name(envelope_name), plain_name)
+        self.assertEqual(envelope.archive_name(envelope_name), archive_name)
+        self.assertEqual(envelope.envelope_name(envelope_name), envelope_name)
+        self.assertEqual(envelope.envelope_archive_name(envelope_name), envelope_archive_name)
 
-        self.assertEqual(kms_agent.plain_name(envelope_archive_name), plain_name)
-        self.assertEqual(kms_agent.archive_name(envelope_archive_name), archive_name)
-        self.assertEqual(kms_agent.envelope_name(envelope_archive_name), envelope_name)
-        self.assertEqual(kms_agent.envelope_archive_name(envelope_archive_name), envelope_archive_name)
+        self.assertEqual(envelope.plain_name(envelope_archive_name), plain_name)
+        self.assertEqual(envelope.archive_name(envelope_archive_name), archive_name)
+        self.assertEqual(envelope.envelope_name(envelope_archive_name), envelope_name)
+        self.assertEqual(envelope.envelope_archive_name(envelope_archive_name), envelope_archive_name)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -148,7 +148,7 @@ class TestKmsAgent(EnvelopesTestBaseClass):
 
         # - - - - - - - - - - - - - - - -
         with self.assertRaises(errors.KmsHelperInitializationError):
-            kms_agent.KmsAgent()
+            envelope.KmsAgent()
 
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -156,7 +156,7 @@ class TestKmsAgent(EnvelopesTestBaseClass):
         """Test KmsAgent initialization. """
 
         # - - - - - - - - - - - - - - - -
-        mki_agent = kms_agent.KmsAgent(
+        mki_agent = envelope.KmsAgent(
             master_key_id=TESTING_KMS_MASTER_KEY_ID
             )
 
@@ -169,7 +169,7 @@ class TestKmsAgent(EnvelopesTestBaseClass):
         self.assertIsNotNone(mki_agent.ciphertext_blob)
 
         # - - - - - - - - - - - - - - - -
-        mki_agent = kms_agent.KmsAgent(
+        mki_agent = envelope.KmsAgent(
             master_key_id=TESTING_KMS_MASTER_KEY_ARN
             )
 
@@ -183,7 +183,7 @@ class TestKmsAgent(EnvelopesTestBaseClass):
         # - - - - - - - - - - - - - - - -
         data_key = mki_agent.data_key
 
-        dk_agent = kms_agent.KmsAgent(
+        dk_agent = envelope.KmsAgent(
             master_key_id=TESTING_KMS_MASTER_KEY_ARN,
             data_key=data_key
             )
@@ -198,7 +198,7 @@ class TestKmsAgent(EnvelopesTestBaseClass):
         # - - - - - - - - - - - - - - - -
         blob = dk_agent.ciphertext_blob
 
-        cb_agent = kms_agent.KmsAgent(
+        cb_agent = envelope.KmsAgent(
             ciphertext_blob=blob
             )
 
@@ -228,7 +228,7 @@ class TestKmsAgent(EnvelopesTestBaseClass):
         self.assertTrue(filecmp.cmp(plaintext_path, orig_plaintext_path))
 
         # - - - - - - - - - - - - - - - -
-        agent = kms_agent.KmsAgent(
+        agent = envelope.KmsAgent(
             master_key_id=TESTING_KMS_MASTER_KEY_ARN
             )
 
