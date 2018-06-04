@@ -240,12 +240,15 @@ class TestKmsAgent(EnvelopesTestBaseClass):
         self.assertEqual(envelope_path, expected_envelope_archive_path)
         self.assertTrue(os.path.exists(envelope_path))
 
-        # print(os.listdir(self.tmpdir))
-        # print(envelope_path)
+        # Remove the original plaintext path and see if it recreates.
+        os.remove(plaintext_path)
+        self.assertFalse(os.path.exists(plaintext_path))
 
         unpacked_path = agent.open_envelope(envelope_path, self.tmpdir)
 
         self.assertEqual(unpacked_path, plaintext_path)
+        self.assertTrue(os.path.exists(plaintext_path))
+        self.assertTrue(filecmp.cmp(plaintext_path, orig_plaintext_path))
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
