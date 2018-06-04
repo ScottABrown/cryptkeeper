@@ -1,6 +1,6 @@
 """_engine.py
 
-Core encrypotion/decryption functionality.
+Core encryption/decryption functionality.
 
 See http://eli.thegreenplace.net/2010/06/25/
 aes-encryption-of-files-in-python-with-pycrypto.
@@ -9,7 +9,6 @@ aes-encryption-of-files-in-python-with-pycrypto.
 
 
 import os
-import random
 import struct
 
 from Crypto.Cipher import AES
@@ -131,8 +130,6 @@ def decrypt_file(
         # Read the file size chunk first:
         file_length_field = in_fptr.read(_FILE_LENGTH_FIELD_SIZE)
         origsize = struct.unpack('<Q', file_length_field)[0]
-
-        # Now reset to the beginning and process:
 
         iv = in_fptr.read(_IV_SIZE)
         decryptor = AES.new(key, AES.MODE_CBC, iv)
