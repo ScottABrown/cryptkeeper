@@ -9,6 +9,7 @@ import tarfile
 import tempfile
 
 import boto3
+import click
 
 from cryptkeeper import _engine
 from cryptkeeper import errors
@@ -306,6 +307,7 @@ class KmsAgent(object):
         return output_tar_path
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    @classmethod
     def open_envelope(self, input_path, output_path):
         """Obtain the plaintext of the contents of envelope_path.
 
@@ -511,7 +513,8 @@ class Enveloper(object):
         return output_tar_path
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    def open_envelope(self, input_path, output_path):
+    @classmethod
+    def open_envelope(cls, input_path, output_path):
         """Obtain the plaintext of the contents of envelope_path.
 
         Arguments:
@@ -594,3 +597,149 @@ class Enveloper(object):
             output_path,
             os.path.splitext(os.path.basename(decrypted_archive_path))[0]
             )
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@click.command()
+@click.option(
+    '-b', '--ciphertext-blob', metavar="/PATH/TO/BLOB",
+    help='The path to the ciphertext blob to use.')
+@click.option(
+    '-d', '--data-key',
+    help='The data key to use.'
+    )
+@click.option(
+    '-m', '--master-key-id',
+    help='The KMS master key ID to use.'
+    )
+@click.option(
+    '-o', '--output_path', metavar="/PATH/TO/OUTPUT",
+    help='The desired output path.'
+    )
+@click.option(
+    '--profile_name',
+    help='The AWS profile name.'
+    )
+@click.option(
+    '--region_name',
+    help='The AWS region name.'
+    )
+@click.argument('plaintext')
+def create_envelope(
+        ciphertext_blob,
+        data_key,
+        master_key_id,
+        output_path,
+        profile_name,
+        region_name,
+        plaintext
+        ):
+    """Create a KMS data envelope protecting PLAINTEXT.
+
+    PLAINTEXT can be the path to either a file or a directory.
+    """
+
+    # TODO: This seems to silently fail when PLAINTEXT ends with '/'.
+    agent = KmsAgent(
+        master_key_id=master_key_id,
+        data_key=data_key,
+        ciphertext_blob=ciphertext_blob,
+        profile_name=profile_name,
+        region_name=region_name
+        )
+    agent.create_envelope(plaintext, output_path=output_path)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@click.command()
+@click.option(
+    '-b', '--ciphertext-blob', metavar="/PATH/TO/BLOB",
+    help='The path to the ciphertext blob to use.')
+@click.option(
+    '-d', '--data-key',
+    help='The data key to use.'
+    )
+@click.option(
+    '-m', '--master-key-id',
+    help='The KMS master key ID to use.'
+    )
+@click.option(
+    '-o', '--output_path', metavar="/PATH/TO/OUTPUT",
+    help='The desired output path.'
+    )
+@click.option(
+    '--profile_name',
+    help='The AWS profile name.'
+    )
+@click.option(
+    '--region_name',
+    help='The AWS region name.'
+    )
+@click.argument('plaintext')
+def create_envelope(
+        ciphertext_blob,
+        data_key,
+        master_key_id,
+        output_path,
+        profile_name,
+        region_name,
+        plaintext
+        ):
+    """Create a KMS data envelope protecting PLAINTEXT.
+
+    PLAINTEXT can be the path to either a file or a directory.
+    """
+
+    # TODO: This seems to silently fail when PLAINTEXT ends with '/'.
+    agent = KmsAgent(
+        master_key_id=master_key_id,
+        data_key=data_key,
+        ciphertext_blob=ciphertext_blob,
+        profile_name=profile_name,
+        region_name=region_name
+        )
+    agent.create_envelope(plaintext, output_path=output_path)
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@click.command()
+# @click.option(
+#     '-b', '--ciphertext-blob', metavar="/PATH/TO/BLOB",
+#     help='The path to the ciphertext blob to use.')
+# @click.option(
+#     '-d', '--data-key',
+#     help='The data key to use.'
+#     )
+# @click.option(
+#     '-m', '--master-key-id',
+#     help='The KMS master key ID to use.'
+#     )
+@click.option(
+    '-o', '--output_path', metavar="/PATH/TO/OUTPUT",
+    help='The desired output path.'
+    )
+@click.option(
+    '--profile_name',
+    help='The AWS profile name.'
+    )
+@click.option(
+    '--region_name',
+    help='The AWS region name.'
+    )
+@click.argument('envelope')
+def open_envelope(
+        # ciphertext_blob,
+        # data_key,
+        # master_key_id,
+        output_path,
+        profile_name,
+        region_name,
+        envelope
+        ):
+    """Open the KMS data envelope ENVELOPE. """
+    # agent = KmsAgent(
+    #     # master_key_id=master_key_id,
+    #     # data_key=data_key,
+    #     # ciphertext_blob=ciphertext_blob,
+    #     profile_name=profile_name,
+    #     region_name=region_name
+    #     )
+    KmsAgent.open_envelope(envelope, output_path=output_path)

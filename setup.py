@@ -13,8 +13,9 @@ from setuptools import setup
 
 
 install_requires=[
-    'boto3',
-    'pycrypto'
+    'boto3>=1.7.25',
+    'click>=6.7',
+    'pycrypto>=2.6.1',
     ],
 
 package_data={
@@ -37,14 +38,15 @@ script_package_paths = [
     ]
 
 entry_points={
-    # 'console_scripts': [
-    #     'command = some_filename:main',
-    #     ],
+    'console_scripts': [
+        'ckcreate = cryptkeeper.envelope:create_envelope',
+        'ckopen = cryptkeeper.envelope:open_envelope',
+        ],
     }
 
 setup(
     name="cryptkeeper",
-    version="1.0.0",
+    version="1.0.1",
     description="",
     author="Scott Brown",
     author_email='scottbrown0001@gmail.com',

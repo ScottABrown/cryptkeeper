@@ -106,6 +106,7 @@ class TestKmsAgentModule(EnvelopesTestBaseClass):
     """Test cases for KmsAgent class functionality. """
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    @unittest.skipIf(not hasattr(envelope, 'plain_name'), 'Not implemented')
     def test_kms_agent_filename_methods(self):
         """Test KmsAgent module filename manipulation methods. """
 
