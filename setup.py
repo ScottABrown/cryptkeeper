@@ -15,7 +15,7 @@ from setuptools import setup
 install_requires=[
     'boto3>=1.7.25',
     'click>=6.7',
-    'pycrypto>=2.6.1',
+    'pycryptodome>=3.6.4',
     ],
 
 package_data={

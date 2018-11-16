@@ -30,20 +30,22 @@ def encrypt_file(
 
         key:
             The encryption key - a string that must be either 16, 24 or 32 bytes
-            long. Longer keys are more secure.
+            long. Longer keys are more secure. The length of the key determines
+            the AES version.
 
         in_filename:
             Name of the input file
 
         out_filename:
             If None, '<in_filename>.enc' will be used.
-
-        chunksize:
-            Sets the size of the chunk which the function uses to read and
-            encrypt the file. Larger chunk sizes can be faster for some files
-            and machines. chunksize must be divisible by 16.
-
     """
+    # """
+    #     chunksize:
+    #         Sets the size of the chunk which the function uses to read and
+    #         encrypt the file. Larger chunk sizes can be faster for some files
+    #         and machines. chunksize must be divisible by 16.
+    #
+    # """
     # TODO: Add a MAC in the padding?
 
     if not out_filename:
@@ -56,7 +58,7 @@ def encrypt_file(
     encryptor = AES.new(key, AES.MODE_CBC, iv)
 
     filesize = os.path.getsize(in_filename)
-
+ 
     with open(in_filename, 'rb') as in_fptr:
         with open(out_filename, 'wb') as out_fptr:
             out_fptr.write(struct.pack('<Q', filesize))
