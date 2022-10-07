@@ -341,7 +341,26 @@ class KmsAgent(object):
         # tmp_envelope_name = '.'.join([input_tar_name, 'untarred'])
         # tmp_envelope_path = os.path.join(tmpdir, tmp_envelope_name)
         with tarfile.open(input_path, 'r:gz') as input_tar_archive:
-            input_tar_archive.extractall(path=tmpdir)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
+                
+            
+            safe_extract(input_tar_archive, path=tmpdir)
 
         # TODO: Use filename manipulation methods.
         kms_envelope_path = os.path.join(tmpdir, os.listdir(tmpdir)[0])
@@ -375,7 +394,26 @@ class KmsAgent(object):
         # Untar the unencrypted file to the output path.
         # TODO: This just assumes output_path is a directory.
         with tarfile.open(decrypted_archive_path, 'r:gz') as output_archive:
-            output_archive.extractall(path=output_path)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
+                
+            
+            safe_extract(output_archive, path=output_path)
 
         # - - - - - - - - - - - - - - - - - - - - - - - -
         # Remove the temporary directory.
@@ -546,7 +584,26 @@ class Enveloper(object):
         # tmp_envelope_name = '.'.join([input_tar_name, 'untarred'])
         # tmp_envelope_path = os.path.join(tmpdir, tmp_envelope_name)
         with tarfile.open(input_path, 'r:gz') as input_tar_archive:
-            input_tar_archive.extractall(path=tmpdir)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
+                
+            
+            safe_extract(input_tar_archive, path=tmpdir)
 
         # TODO: Use filename manipulation methods.
         kms_envelope_path = os.path.join(tmpdir, os.listdir(tmpdir)[0])
@@ -580,7 +637,26 @@ class Enveloper(object):
         # Untar the unencrypted file to the output path.
         # TODO: This just assumes output_path is a directory.
         with tarfile.open(decrypted_archive_path, 'r:gz') as output_archive:
-            output_archive.extractall(path=output_path)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
+                
+            
+            safe_extract(output_archive, path=output_path)
 
         # - - - - - - - - - - - - - - - - - - - - - - - -
         # Remove the temporary directory.
